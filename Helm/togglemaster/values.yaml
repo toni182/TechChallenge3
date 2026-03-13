@@ -220,8 +220,7 @@ analytics-service:
   maxSurge: 50%
   maxUnavailable: 0
   replicas: 2
-  image: morganis1411/togglemaster_analytics-service:1.1
-  #image: 449954007039.dkr.ecr.us-east-1.amazonaws.com/togglemaster_analytics-service:1.2.0
+  image: 449954007039.dkr.ecr.us-east-1.amazonaws.com/togglemaster_analytics-service:1.2.0
   port: 8005
   ingress: 
     path: /analytics-service(/|$)(.*)
