@@ -4,10 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  trigger-pipelines:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
+
+      # -----------------------------
+      # AUTH
+      # -----------------------------
       - name: Trigger auth pipeline
         run: |
           curl -X POST \
@@ -16,6 +20,28 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/actions/workflows/auth.yml/dispatches \
           -d '{"ref":"main"}'
 
+      - name: Wait auth pipeline
+        run: |
+          echo "Waiting auth workflow..."
+          while true; do
+            STATUS=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.GITOPS_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/actions/workflows/auth.yml/runs?per_page=1 \
+              | jq -r '.workflow_runs[0].status')
+
+            echo "$(date) - Status: $STATUS"
+
+            if [ "$STATUS" == "completed" ]; then
+              break
+            fi
+
+            sleep 30
+          done
+
+
+      # -----------------------------
+      # FLAG
+      # -----------------------------
       - name: Trigger flag pipeline
         run: |
           curl -X POST \
@@ -24,6 +50,28 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/actions/workflows/flag.yml/dispatches \
           -d '{"ref":"main"}'
 
+      - name: Wait flag pipeline
+        run: |
+          echo "Waiting flag workflow..."
+          while true; do
+            STATUS=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.GITOPS_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/actions/workflows/flag.yml/runs?per_page=1 \
+              | jq -r '.workflow_runs[0].status')
+
+            echo "$(date) - Status: $STATUS"
+
+            if [ "$STATUS" == "completed" ]; then
+              break
+            fi
+
+            sleep 30
+          done
+
+
+      # -----------------------------
+      # TARGETING
+      # -----------------------------
       - name: Trigger targeting pipeline
         run: |
           curl -X POST \
@@ -32,6 +80,28 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/actions/workflows/targeting.yml/dispatches \
           -d '{"ref":"main"}'
 
+      - name: Wait targeting pipeline
+        run: |
+          echo "Waiting targeting workflow..."
+          while true; do
+            STATUS=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.GITOPS_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/actions/workflows/targeting.yml/runs?per_page=1 \
+              | jq -r '.workflow_runs[0].status')
+
+            echo "$(date) - Status: $STATUS"
+
+            if [ "$STATUS" == "completed" ]; then
+              break
+            fi
+
+            sleep 30
+          done
+
+
+      # -----------------------------
+      # EVALUATION
+      # -----------------------------
       - name: Trigger evaluation pipeline
         run: |
           curl -X POST \
@@ -40,6 +110,28 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/actions/workflows/evaluation.yml/dispatches \
           -d '{"ref":"main"}'
 
+      - name: Wait evaluation pipeline
+        run: |
+          echo "Waiting evaluation workflow..."
+          while true; do
+            STATUS=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.GITOPS_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/actions/workflows/evaluation.yml/runs?per_page=1 \
+              | jq -r '.workflow_runs[0].status')
+
+            echo "$(date) - Status: $STATUS"
+
+            if [ "$STATUS" == "completed" ]; then
+              break
+            fi
+
+            sleep 30
+          done
+
+
+      # -----------------------------
+      # ANALYTICS
+      # -----------------------------
       - name: Trigger analytics pipeline
         run: |
           curl -X POST \
@@ -47,3 +139,21 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           https://api.github.com/repos/${{ github.repository }}/actions/workflows/analytics.yml/dispatches \
           -d '{"ref":"main"}'
+
+      - name: Wait analytics pipeline
+        run: |
+          echo "Waiting analytics workflow..."
+          while true; do
+            STATUS=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.GITOPS_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/actions/workflows/analytics.yml/runs?per_page=1 \
+              | jq -r '.workflow_runs[0].status')
+
+            echo "$(date) - Status: $STATUS"
+
+            if [ "$STATUS" == "completed" ]; then
+              break
+            fi
+
+            sleep 30
+          done
