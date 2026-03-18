@@ -5,7 +5,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  EKS_CLUSTER_NAME: techchallenge3-cluster
+  EKS_CLUSTER_NAME: togglemaster-eks-prod
 
 jobs:
   build-test-security:
