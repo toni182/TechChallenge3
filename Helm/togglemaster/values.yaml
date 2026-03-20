@@ -3,7 +3,7 @@ auth-service:
   maxSurge: 50%
   maxUnavailable: 0
   replicas: 2
-  image: 057096910794.dkr.ecr.us-east-1.amazonaws.com/auth-service:9acc3d4
+  image: 654654467270.dkr.ecr.us-east-1.amazonaws.com/auth-service:f9c21f9
   port: 8001
   ingress: 
     path: /auth-service(/|$)(.*)
@@ -22,7 +22,7 @@ auth-service:
       );
   job:
     name: auth-db-init
-    image: 057096910794.dkr.ecr.us-east-1.amazonaws.com/auth-service:9acc3d4
+    image: 654654467270.dkr.ecr.us-east-1.amazonaws.com/auth-service:f9c21f9
     command: ["sh", "-c"]
     args:
       - |
