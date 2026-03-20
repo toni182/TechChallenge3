@@ -232,5 +232,6 @@ analytics-service:
 
 argocd:
   namespace: argocd
-  ingress: 
+  port: 80
+  ingress:
     path: /argocd
