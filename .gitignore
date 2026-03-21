@@ -1,1 +1,3 @@
 secret.yaml
+old/
+.golangci.yaml
