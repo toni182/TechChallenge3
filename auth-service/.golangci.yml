@@ -14,7 +14,6 @@
 # In a production-grade backend service, these linters should be enabled.
 # ----------------------------------------------------------------------
 
-version: "2"
 
 linters:
   disable:
