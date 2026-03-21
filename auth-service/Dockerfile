@@ -1,28 +1,45 @@
-# Etapa 1: Build do Go
-FROM golang:1.24-alpine AS builder
+#FROM golang:1.21-alpine
+#
+#WORKDIR /app
+#
+#COPY *.go .
+#
+#COPY go.mod .
+#
+#RUN go mod tidy
+#
+#RUN env
+#
+#CMD [ "go", "run", "." ]
+#
+##-----------
+
+
+# Estágio 1: "Builder"
+FROM golang:1.21-alpine AS builder
 
 WORKDIR /app
 
-# Copia arquivos de dependências
-COPY go.mod go.sum ./
-RUN go mod download
+# 1. Copia o go.mod
+COPY go.mod ./
 
-# Copia todo o código
+# 2. Copia TODO o código-fonte (.go) imediatamente
+# O 'tidy' precisa ler os imports destes arquivos
 COPY . .
 
-# Compila o binário
-RUN go build -o auth-service .
+# 3. AGORA sim, roda o 'tidy'
+# Ele vai ler os .go, ver os imports, e CRIAR O go.sum
+RUN go mod tidy
 
-# Etapa 2: Container final mais leve
+# 4. Compila a aplicação
+# O 'go build' agora usará o go.mod e o go.sum criados pelo 'tidy'
+RUN CGO_ENABLED=0 go build -o auth-service -ldflags "-s -w" .
+
+# -----------------------------------------------------------------
+# Estágio 2: "Final" (Inalterado)
+# -----------------------------------------------------------------
 FROM alpine:3.23
-RUN apk update && apk upgrade
-
 WORKDIR /app
-
-# Copia o binário e o .env
 COPY --from=builder /app/auth-service .
-
 EXPOSE 8001
-
-# Comando padrão ao iniciar o container
 CMD ["./auth-service"]
