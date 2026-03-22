@@ -13,8 +13,8 @@ import (
 
 // App struct (para injeção de dependência)
 type App struct {
-	DB         *sql.DB
-	MasterKey  string
+	DB        *sql.DB
+	MasterKey string
 }
 
 func main() {
@@ -27,8 +27,9 @@ func main() {
 		port = "8001" // Porta padrão
 	}
 
-databaseURL := os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("DATABASE_URL")
 
+<<<<<<< Updated upstream
 if databaseURL == "" {
     // Caso não exista, monta a URL a partir das variáveis individuais
     user := os.Getenv("POSTGRES_USER")
@@ -43,6 +44,22 @@ if databaseURL == "" {
 
     databaseURL = fmt.Sprintf("postgres://%s:%s@%s:%s/%s", user, password, host, dbPort, dbName)
 }
+=======
+	if databaseURL == "" {
+		// Caso não exista, monta a URL a partir das variáveis individuais
+		user := os.Getenv("POSTGRES_USER")
+		password := os.Getenv("POSTGRES_PASSWORD")
+		host := os.Getenv("POSTGRES_HOST")
+		port := os.Getenv("POSTGRES_PORT")
+		dbName := os.Getenv("POSTGRES_DB")
+
+		if user == "" || password == "" || host == "" || port == "" || dbName == "" {
+			log.Fatal("Variáveis de ambiente insuficientes para montar a conexão com o banco de dados")
+		}
+
+		databaseURL = fmt.Sprintf("postgres://%s:%s@%s:%s/%s", user, password, host, port, dbName)
+	}
+>>>>>>> Stashed changes
 
 	masterKey := os.Getenv("MASTER_KEY")
 	if masterKey == "" {
@@ -57,8 +74,8 @@ if databaseURL == "" {
 	defer db.Close()
 
 	app := &App{
-		DB:         db,
-		MasterKey:  masterKey,
+		DB:        db,
+		MasterKey: masterKey,
 	}
 
 	// --- Rotas da API ---
