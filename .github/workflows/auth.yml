@@ -8,14 +8,14 @@ on:
       - main
     paths-ignore:
       - '.github/workflows/**'
-      - 'Helm/togglemaster/**'
+      - 'Helm/togglemaster/values.yaml'
 
   pull_request:
     branches:
       - main
     paths-ignore:
       - '.github/workflows/**'
-      - 'Helm/togglemaster/**'
+      - 'Helm/togglemaster/values.yaml'
 
 env:
   SERVICE_NAME: auth-service
