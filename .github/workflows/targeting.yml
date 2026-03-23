@@ -9,7 +9,6 @@ on:
     paths:
       - 'targeting-service/**'
 
-
   pull_request:
     branches:
       - main
